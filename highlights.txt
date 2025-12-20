@@ -1,7 +1,0 @@
-Highlights
-
-- Low-dimensional codes constrain high-dimensional coupled dynamical systems
-- Code bandwidth systematically controls responding system's behavioral complexity
-- Random projections of same dimensionality fail to induce complexity collapse
-- Constraining codes must capture coherent macroscopic degrees of freedom
-- Provides mechanism for ubiquitous low-dimensional biological coding structures

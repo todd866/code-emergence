@@ -1,31 +1,30 @@
-# Low-Dimensional Codes Constrain High-Dimensional Biological Dynamics
+# The Code-Constraint Problem in Biological Systems
 
-Manuscript and supporting materials for submission to *Progress in Biophysics & Molecular Biology*.
+How Low-Dimensional Interfaces Shape High-Dimensional Dynamics
+
+Manuscript for submission to *Progress in Biophysics & Molecular Biology*.
 
 ## Overview
 
-This repository contains code and data for simulations demonstrating that low-dimensional codes act as dimensional constraints between coupled high-dimensional dynamical systems. Using Kuramoto oscillator lattices with bandwidth-limited Fourier coupling, we show that:
+This paper proposes a framework for understanding dimensional mismatch in biological systems. Low-dimensional interfaces between coupled high-dimensional systems function as **stabilizing constraints** rather than information channels.
 
-1. Reducing code bandwidth induces systematic complexity collapse in the responding system
-2. The driving system's complexity remains unchanged regardless of bandwidth
-3. Random k-mode projections of the same dimensionality fail to constrain complexity
-4. Constraining codes must capture coherent macroscopic degrees of freedom
+Using coupled oscillator simulations, we demonstrate that bandwidth-limited coupling produces:
+1. **Complexity collapse**: Responding system's effective dimensionality decreases with code bandwidth
+2. **Bounded tracking**: Alignment remains stable despite information loss
+3. **Structure dependence**: Effect requires coherent projections; random projections fail
 
 ## Repository Structure
 
 ```
-├── code_formation_jtb.tex    # Main manuscript (LaTeX)
-├── code_formation_jtb.pdf    # Compiled manuscript
+├── code_formation.tex        # Main manuscript (LaTeX)
+├── code_formation.pdf        # Compiled manuscript
 ├── references.bib            # Bibliography
-├── highlights.txt            # Highlights (3-5 bullets)
-└── supporting_files/
-    ├── generate_figures.js   # Main simulation code (Node.js)
-    ├── plot_figures.py       # Figure generation (Python/matplotlib)
-    ├── create_schematic.py   # Figure 1 schematic
-    ├── create_reconstruction_comparison.py  # Figure 5 reconstruction demo
-    ├── fig3_complexity_vs_k.csv    # Data: complexity vs bandwidth
-    ├── fig4_complexity_vs_lambda.csv  # Data: complexity vs coupling strength
-    ├── fig_random_projection.csv   # Data: random mode control
+├── code/
+│   ├── generate_figures.js   # Main simulation (Node.js)
+│   ├── plot_figures.py       # Figure plotting (Python)
+│   ├── create_schematic.py   # Figure 1 schematic
+│   └── create_reconstruction_comparison.py
+└── figures/
     └── fig_*.pdf             # Generated figures
 ```
 
@@ -37,11 +36,10 @@ This repository contains code and data for simulations demonstrating that low-di
 
 ### Generate data and figures
 ```bash
-cd supporting_files
+cd code
 node generate_figures.js
 python plot_figures.py
 python create_schematic.py
-python create_reconstruction_comparison.py
 ```
 
 ## Key Parameters
@@ -56,7 +54,7 @@ python create_reconstruction_comparison.py
 
 If you use this code, please cite:
 
-> Todd, I. (2025). Low-dimensional codes constrain high-dimensional biological dynamics. *Progress in Biophysics & Molecular Biology* (in preparation).
+> Todd, I. (2025). The code-constraint problem in biological systems: How low-dimensional interfaces shape high-dimensional dynamics. *Progress in Biophysics & Molecular Biology* (in preparation).
 
 ## License
 
