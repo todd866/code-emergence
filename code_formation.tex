@@ -106,11 +106,11 @@ This is precisely the mechanism we formalize below: a high-dimensional respondin
 
 \subsection{Neural Population Codes}
 
-Neuroscience faces the dimensional mismatch problem acutely. Neural populations fire in high-dimensional pattern spaces, yet behavior is low-dimensional and motor outputs are constrained by biomechanics. How does the brain bridge this gap?
+Neuroscience faces the dimensional mismatch problem acutely. Neural populations fire in high-dimensional pattern spaces, yet must coordinate across distant brain regions. How does the brain achieve this coupling?
 
-Population coding theories typically frame neural activity as \textit{representing} task variables \citep{georgopoulos1986,pouget2000}. An alternative framing asks which aspects of population activity \textit{constrain} downstream processing. The brain's extensive dimensionality reduction---from millions of cortical neurons to a few hundred motor neurons---is not merely information compression but trajectory constraint.
+A key insight emerges from oscillatory dynamics: low-frequency oscillations can coordinate activity across spatially distributed populations, while high-frequency (gamma) activity carries precise local information but couples only locally \citep{miller2018,buzsaki2004}. Counterintuitively, this means low-frequency coupling may \textit{enable} high-dimensional coordination---the slow oscillation provides a shared temporal reference that allows distant populations to integrate. The ``bandwidth'' of inter-regional coupling is set by oscillatory frequency, not by the intrinsic complexity of local circuits.
 
-Recent work on neural manifolds supports this view: population activity is confined to low-dimensional subspaces that constrain what computations are possible \citep{gallego2017,sadtler2014}. Learning a new behavior requires either operating within the existing manifold or expanding it---a constraint on behavioral complexity, not just a summary of neural activity.
+Population coding theories typically frame neural activity as \textit{representing} task variables \citep{georgopoulos1986,pouget2000}. An alternative framing asks which aspects of population activity \textit{constrain} downstream processing. Recent work on neural manifolds shows that population activity is confined to low-dimensional subspaces \citep{gallego2017,sadtler2014}. But these manifolds may reflect the bandwidth limitations of inter-regional coupling rather than intrinsic computational simplicity. Learning a new behavior requires either operating within the existing manifold or expanding it---a constraint imposed by the coupling interface, not just a summary of neural activity.
 
 \section{A Minimal Model of Code-Constraint Dynamics}
 
