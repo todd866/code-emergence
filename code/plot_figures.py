@@ -19,9 +19,9 @@ mpl.rcParams['figure.dpi'] = 300
 mpl.rcParams['savefig.dpi'] = 300
 mpl.rcParams['savefig.bbox'] = 'tight'
 
-# Load data
-fig3_data = np.genfromtxt('fig3_complexity_vs_k.csv', delimiter=',', names=True)
-fig4_data = np.genfromtxt('fig4_complexity_vs_lambda.csv', delimiter=',', names=True)
+# Load data from figures directory
+fig3_data = np.genfromtxt('../figures/fig3_complexity_vs_k.csv', delimiter=',', names=True)
+fig4_data = np.genfromtxt('../figures/fig4_complexity_vs_lambda.csv', delimiter=',', names=True)
 
 # =============================================================================
 # FIGURE 3: Complexity vs k
@@ -45,13 +45,13 @@ ax.set_ylabel(r'Effective dimensionality $N_{\mathrm{eff}}$')
 ax.set_xscale('log', base=2)
 ax.set_xticks(k)
 ax.set_xticklabels([str(int(x)) for x in k])
-ax.set_ylim(6, 18)
+ax.set_ylim(8, 20)
 ax.legend(loc='lower right')
 ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig('fig_complexity.pdf')
-plt.savefig('fig_complexity.png')
+plt.savefig('../figures/fig_complexity.pdf')
+plt.savefig('../figures/fig_complexity.png')
 print("Saved fig_complexity.pdf")
 
 # =============================================================================
@@ -77,8 +77,8 @@ ax.legend(loc='upper right')
 ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig('fig_mismatch.pdf')
-plt.savefig('fig_mismatch.png')
+plt.savefig('../figures/fig_mismatch.pdf')
+plt.savefig('../figures/fig_mismatch.png')
 print("Saved fig_mismatch.pdf")
 
 # =============================================================================
@@ -114,8 +114,8 @@ ax.legend(lines, labels, loc='center right')
 ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig('fig_lambda.pdf')
-plt.savefig('fig_lambda.png')
+plt.savefig('../figures/fig_lambda.pdf')
+plt.savefig('../figures/fig_lambda.png')
 print("Saved fig_lambda.pdf")
 
 # =============================================================================
@@ -135,7 +135,7 @@ ax1.set_ylabel(r'Effective dimensionality $N_{\mathrm{eff}}$')
 ax1.set_xscale('log', base=2)
 ax1.set_xticks(k)
 ax1.set_xticklabels([str(int(x)) for x in k])
-ax1.set_ylim(6, 18)
+ax1.set_ylim(8, 20)
 ax1.legend(loc='lower right')
 ax1.grid(True, alpha=0.3)
 ax1.set_title('(A) Complexity collapse', fontsize=11)
@@ -155,15 +155,15 @@ ax2.grid(True, alpha=0.3)
 ax2.set_title('(B) Tracking error', fontsize=11)
 
 plt.tight_layout()
-plt.savefig('fig_main_result.pdf')
-plt.savefig('fig_main_result.png')
+plt.savefig('../figures/fig_main_result.pdf')
+plt.savefig('../figures/fig_main_result.png')
 print("Saved fig_main_result.pdf")
 
 # =============================================================================
 # FIGURE 5: RANDOM PROJECTION CONTROL
 # =============================================================================
 
-random_data = np.genfromtxt('fig_random_projection.csv', delimiter=',', names=True)
+random_data = np.genfromtxt('../figures/fig_random_projection.csv', delimiter=',', names=True)
 
 fig, ax = plt.subplots()
 
@@ -178,7 +178,7 @@ ax.errorbar(k, Neff_B_fourier, yerr=se_B_fourier, marker='s', linestyle='-', col
 ax.errorbar(k_rand, Neff_B_random, yerr=se_B_random, marker='^', linestyle='--', color='#b2182b',
             label=r'Random mode selection', capsize=3, markersize=6)
 
-ax.axhline(y=13.0, color='#666666', linestyle=':', alpha=0.7, label=r'$N_{\mathrm{eff}}(A)$ baseline')
+ax.axhline(y=17.0, color='#666666', linestyle=':', alpha=0.7, label=r'$N_{\mathrm{eff}}(A)$ baseline')
 
 ax.set_xlabel(r'Code bandwidth $k$')
 ax.set_ylabel(r'Effective dimensionality $N_{\mathrm{eff}}(B)$')
@@ -190,8 +190,8 @@ ax.legend(loc='lower right')
 ax.grid(True, alpha=0.3)
 
 plt.tight_layout()
-plt.savefig('fig_random_control.pdf')
-plt.savefig('fig_random_control.png')
+plt.savefig('../figures/fig_random_control.pdf')
+plt.savefig('../figures/fig_random_control.png')
 print("Saved fig_random_control.pdf")
 
 print("\nAll figures generated!")

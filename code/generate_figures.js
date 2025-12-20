@@ -30,7 +30,7 @@ function createLattice() {
 
 function stepLattice(lattice, K, noise, dt) {
   const { theta, omega } = lattice;
-  const dtheta = new Float32Array(N);
+  const sqrtDt = Math.sqrt(dt);  // Euler-Maruyama: noise scales with sqrt(dt)
 
   for (let i = 0; i < N; i++) {
     const left = (i - 1 + N) % N;
@@ -38,11 +38,8 @@ function stepLattice(lattice, K, noise, dt) {
     let coupling = Math.sin(theta[left] - theta[i]) + Math.sin(theta[right] - theta[i]);
     const u1 = Math.random(), u2 = Math.random();
     const eta = Math.sqrt(-2 * Math.log(u1 + 1e-10)) * Math.cos(2 * Math.PI * u2);
-    dtheta[i] = omega[i] + K * coupling + noise * eta;
-  }
-
-  for (let i = 0; i < N; i++) {
-    theta[i] += dt * dtheta[i];
+    // Deterministic terms scale with dt; stochastic term scales with sqrt(dt)
+    theta[i] += dt * (omega[i] + K * coupling) + sqrtDt * noise * eta;
     theta[i] = ((theta[i] + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
   }
 }
@@ -126,7 +123,7 @@ function stepCoupled(A, B, k, K, lambda, noise, dt) {
   const targetPhase = fourierDecode(modesA, k);
 
   const { theta, omega } = B;
-  const dtheta = new Float32Array(N);
+  const sqrtDt = Math.sqrt(dt);  // Euler-Maruyama: noise scales with sqrt(dt)
 
   for (let i = 0; i < N; i++) {
     const left = (i - 1 + N) % N;
@@ -135,11 +132,8 @@ function stepCoupled(A, B, k, K, lambda, noise, dt) {
     const codeConstraint = lambda * Math.sin(targetPhase[i] - theta[i]);
     const u1 = Math.random(), u2 = Math.random();
     const eta = Math.sqrt(-2 * Math.log(u1 + 1e-10)) * Math.cos(2 * Math.PI * u2);
-    dtheta[i] = omega[i] + K * coupling + codeConstraint + noise * 0.5 * eta;
-  }
-
-  for (let i = 0; i < N; i++) {
-    theta[i] += dt * dtheta[i];
+    // Deterministic terms scale with dt; stochastic term scales with sqrt(dt)
+    theta[i] += dt * (omega[i] + K * coupling + codeConstraint) + sqrtDt * noise * 0.5 * eta;
     theta[i] = ((theta[i] + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
   }
 }
@@ -330,7 +324,7 @@ function stepCoupledRandom(A, B, randomModes, K, lambda, noise, dt) {
   const targetPhase = fourierDecodeRandom(modesA);
 
   const { theta, omega } = B;
-  const dtheta = new Float32Array(N);
+  const sqrtDt = Math.sqrt(dt);  // Euler-Maruyama: noise scales with sqrt(dt)
 
   for (let i = 0; i < N; i++) {
     const left = (i - 1 + N) % N;
@@ -339,11 +333,8 @@ function stepCoupledRandom(A, B, randomModes, K, lambda, noise, dt) {
     const codeConstraint = lambda * Math.sin(targetPhase[i] - theta[i]);
     const u1 = Math.random(), u2 = Math.random();
     const eta = Math.sqrt(-2 * Math.log(u1 + 1e-10)) * Math.cos(2 * Math.PI * u2);
-    dtheta[i] = omega[i] + K * coupling + codeConstraint + noise * 0.5 * eta;
-  }
-
-  for (let i = 0; i < N; i++) {
-    theta[i] += dt * dtheta[i];
+    // Deterministic terms scale with dt; stochastic term scales with sqrt(dt)
+    theta[i] += dt * (omega[i] + K * coupling + codeConstraint) + sqrtDt * noise * 0.5 * eta;
     theta[i] = ((theta[i] + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
   }
 }
