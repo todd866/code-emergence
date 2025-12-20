@@ -55,24 +55,28 @@ plt.savefig('../figures/fig_complexity.png')
 print("Saved fig_complexity.pdf")
 
 # =============================================================================
-# FIGURE 4a: Mismatch vs k
+# FIGURE 4a: Mismatch vs k (both full and code mismatch)
 # =============================================================================
 
 fig, ax = plt.subplots()
 
 mismatch = fig3_data['mismatch']
+code_mismatch = fig3_data['code_mismatch']
 
-ax.plot(k, mismatch, marker='o', linestyle='-', color='#b2182b', markersize=6)
+ax.plot(k, mismatch, marker='o', linestyle='-', color='#b2182b', markersize=6,
+        label=r'$\Delta(\theta^A, \theta^B)$ (full)')
+ax.plot(k, code_mismatch, marker='s', linestyle='--', color='#2166ac', markersize=6,
+        label=r'$\Delta(\hat{\theta}^A, \theta^B)$ (code)')
 
 # Add control line (uncoupled)
-ax.axhline(y=0.64, color='#666666', linestyle='--', label='Uncoupled control')
+ax.axhline(y=0.64, color='#666666', linestyle=':', alpha=0.7, label='Uncoupled control')
 
 ax.set_xlabel(r'Code bandwidth $k$')
 ax.set_ylabel(r'Mismatch $\Delta$')
 ax.set_xscale('log', base=2)
 ax.set_xticks(k)
 ax.set_xticklabels([str(int(x)) for x in k])
-ax.set_ylim(0.3, 0.7)
+ax.set_ylim(0, 0.7)
 ax.legend(loc='upper right')
 ax.grid(True, alpha=0.3)
 
@@ -140,17 +144,20 @@ ax1.legend(loc='lower right')
 ax1.grid(True, alpha=0.3)
 ax1.set_title('(A) Complexity collapse', fontsize=11)
 
-# Panel B: Mismatch
-ax2.plot(k, mismatch, marker='o', linestyle='-', color='#b2182b', markersize=6)
-ax2.axhline(y=0.64, color='#666666', linestyle='--', label='Uncoupled control')
+# Panel B: Mismatch (both full and code)
+ax2.plot(k, mismatch, marker='o', linestyle='-', color='#b2182b', markersize=6,
+         label=r'$\Delta(\theta^A, \theta^B)$ (full)')
+ax2.plot(k, code_mismatch, marker='s', linestyle='--', color='#2166ac', markersize=6,
+         label=r'$\Delta(\hat{\theta}^A, \theta^B)$ (code)')
+ax2.axhline(y=0.64, color='#666666', linestyle=':', alpha=0.7, label='Uncoupled')
 
 ax2.set_xlabel(r'Code bandwidth $k$')
 ax2.set_ylabel(r'Mismatch $\Delta$')
 ax2.set_xscale('log', base=2)
 ax2.set_xticks(k)
 ax2.set_xticklabels([str(int(x)) for x in k])
-ax2.set_ylim(0.3, 0.7)
-ax2.legend(loc='upper right')
+ax2.set_ylim(0, 0.7)
+ax2.legend(loc='upper right', fontsize=8)
 ax2.grid(True, alpha=0.3)
 ax2.set_title('(B) Tracking error', fontsize=11)
 

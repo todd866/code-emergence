@@ -48,14 +48,16 @@ def spectral_complexity(theta):
 
 
 def fourier_encode_decode(theta, k):
-    """Encode/decode through first k Fourier modes."""
+    """
+    Encode/decode through first k Fourier modes.
+    Matches paper Eq. 4: θ̂_i = arg(Σ_{m=0}^{k} C_m e^{i 2π m i / N})
+    """
     N = len(theta)
     z = np.exp(1j * theta)
     modes = np.fft.fft(z)[:k+1]
+    # Reconstruct using one-sided sum (no negative frequency mirroring)
     modes_filtered = np.zeros(N, dtype=complex)
     modes_filtered[:k+1] = modes
-    if k > 0:
-        modes_filtered[-(k):] = np.conj(modes[1:k+1][::-1])
     z_recon = np.fft.ifft(modes_filtered)
     return np.angle(z_recon)
 

@@ -73,18 +73,16 @@ function fourierEncode(theta, maxK) {
 }
 
 function fourierDecode(modes, k) {
+  // Matches paper Eq. 4: θ̂_i = arg(Σ_{m=0}^{k} C_m e^{i 2π m i / N})
   const recon = new Float32Array(N);
   for (let i = 0; i < N; i++) {
     let zRe = 0, zIm = 0;
     for (let m = 0; m <= Math.min(k, modes.length - 1); m++) {
       const phase = 2 * Math.PI * m * i / N;
       const c = Math.cos(phase), s = Math.sin(phase);
+      // C_m * e^{i*phase} = (re + i*im)(c + i*s) = (re*c - im*s) + i(re*s + im*c)
       zRe += modes[m].re * c - modes[m].im * s;
       zIm += modes[m].re * s + modes[m].im * c;
-      if (m > 0) {
-        zRe += modes[m].re * c + modes[m].im * s;
-        zIm += -modes[m].re * s + modes[m].im * c;
-      }
     }
     recon[i] = Math.atan2(zIm, zRe);
   }
@@ -117,6 +115,18 @@ function phaseMismatch(thetaA, thetaB) {
   let sum = 0;
   for (let i = 0; i < N; i++) {
     const diff = thetaA[i] - thetaB[i];
+    sum += Math.abs(Math.sin(diff / 2));
+  }
+  return sum / N;
+}
+
+function codeMismatch(thetaA, thetaB, k) {
+  // Compute mismatch between reconstructed A (code) and B: Δ(θ̂^A, θ^B)
+  const modes = fourierEncode(thetaA);
+  const thetaRecon = fourierDecode(modes, k);
+  let sum = 0;
+  for (let i = 0; i < N; i++) {
+    const diff = thetaRecon[i] - thetaB[i];
     sum += Math.abs(Math.sin(diff / 2));
   }
   return sum / N;
@@ -162,7 +172,7 @@ const kValues = [1, 2, 4, 8, 16, 32];
 const fig3Data = [];
 
 for (const k of kValues) {
-  let totalComplexA = 0, totalComplexB = 0, totalMismatch = 0;
+  let totalComplexA = 0, totalComplexB = 0, totalMismatch = 0, totalCodeMismatch = 0;
   let complexAVals = [], complexBVals = [];
 
   for (let trial = 0; trial < nTrials; trial++) {
@@ -173,12 +183,13 @@ for (const k of kValues) {
       stepCoupled(A, B, k, K, lambda_fixed, noise, dt);
     }
 
-    let sumComplexA = 0, sumComplexB = 0, sumMismatch = 0;
+    let sumComplexA = 0, sumComplexB = 0, sumMismatch = 0, sumCodeMismatch = 0;
     for (let t = 0; t < measureSteps; t++) {
       stepCoupled(A, B, k, K, lambda_fixed, noise, dt);
       sumComplexA += spectralComplexity(A.theta);
       sumComplexB += spectralComplexity(B.theta);
       sumMismatch += phaseMismatch(A.theta, B.theta);
+      sumCodeMismatch += codeMismatch(A.theta, B.theta, k);
     }
 
     const trialComplexA = sumComplexA / measureSteps;
@@ -187,6 +198,7 @@ for (const k of kValues) {
     totalComplexA += trialComplexA;
     totalComplexB += trialComplexB;
     totalMismatch += sumMismatch / measureSteps;
+    totalCodeMismatch += sumCodeMismatch / measureSteps;
 
     complexAVals.push(trialComplexA);
     complexBVals.push(trialComplexB);
@@ -195,14 +207,15 @@ for (const k of kValues) {
   const avgComplexA = totalComplexA / nTrials;
   const avgComplexB = totalComplexB / nTrials;
   const avgMismatch = totalMismatch / nTrials;
+  const avgCodeMismatch = totalCodeMismatch / nTrials;
 
   // Standard error
   const seA = Math.sqrt(complexAVals.reduce((s, v) => s + (v - avgComplexA) ** 2, 0) / (nTrials - 1)) / Math.sqrt(nTrials);
   const seB = Math.sqrt(complexBVals.reduce((s, v) => s + (v - avgComplexB) ** 2, 0) / (nTrials - 1)) / Math.sqrt(nTrials);
 
-  fig3Data.push({ k, complexA: avgComplexA, complexB: avgComplexB, mismatch: avgMismatch, seA, seB });
+  fig3Data.push({ k, complexA: avgComplexA, complexB: avgComplexB, mismatch: avgMismatch, codeMismatch: avgCodeMismatch, seA, seB });
 
-  console.log(`k=${k.toString().padStart(2)}: N_eff(A)=${avgComplexA.toFixed(2)}±${seA.toFixed(2)} N_eff(B)=${avgComplexB.toFixed(2)}±${seB.toFixed(2)} mismatch=${avgMismatch.toFixed(3)}`);
+  console.log(`k=${k.toString().padStart(2)}: N_eff(A)=${avgComplexA.toFixed(2)}±${seA.toFixed(2)} N_eff(B)=${avgComplexB.toFixed(2)}±${seB.toFixed(2)} mismatch=${avgMismatch.toFixed(3)} code_mismatch=${avgCodeMismatch.toFixed(3)}`);
 }
 
 // =============================================================================
@@ -402,9 +415,9 @@ for (const k of kValues) {
 console.log("\n=== WRITING CSV FILES ===\n");
 
 // Figure 3 data
-let csv3 = "k,Neff_A,Neff_B,mismatch,se_A,se_B\n";
+let csv3 = "k,Neff_A,Neff_B,mismatch,code_mismatch,se_A,se_B\n";
 for (const d of fig3Data) {
-  csv3 += `${d.k},${d.complexA.toFixed(3)},${d.complexB.toFixed(3)},${d.mismatch.toFixed(4)},${d.seA.toFixed(3)},${d.seB.toFixed(3)}\n`;
+  csv3 += `${d.k},${d.complexA.toFixed(3)},${d.complexB.toFixed(3)},${d.mismatch.toFixed(4)},${d.codeMismatch.toFixed(4)},${d.seA.toFixed(3)},${d.seB.toFixed(3)}\n`;
 }
 fs.writeFileSync('fig3_complexity_vs_k.csv', csv3);
 console.log("Wrote fig3_complexity_vs_k.csv");
