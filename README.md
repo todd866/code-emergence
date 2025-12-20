@@ -1,6 +1,6 @@
 # Low-Dimensional Codes Constrain High-Dimensional Biological Dynamics
 
-Manuscript and supporting materials for submission to *Journal of Theoretical Biology*.
+Manuscript and supporting materials for submission to *Progress in Biophysics & Molecular Biology*.
 
 ## Overview
 
@@ -17,7 +17,7 @@ This repository contains code and data for simulations demonstrating that low-di
 ├── code_formation_jtb.tex    # Main manuscript (LaTeX)
 ├── code_formation_jtb.pdf    # Compiled manuscript
 ├── references.bib            # Bibliography
-├── highlights.txt            # JTB highlights (3-5 bullets)
+├── highlights.txt            # Highlights (3-5 bullets)
 └── supporting_files/
     ├── generate_figures.js   # Main simulation code (Node.js)
     ├── plot_figures.py       # Figure generation (Python/matplotlib)
@@ -56,7 +56,7 @@ python create_reconstruction_comparison.py
 
 If you use this code, please cite:
 
-> Todd, I. (2025). Low-dimensional codes constrain high-dimensional biological dynamics. *Journal of Theoretical Biology* (submitted).
+> Todd, I. (2025). Low-dimensional codes constrain high-dimensional biological dynamics. *Progress in Biophysics & Molecular Biology* (in preparation).
 
 ## License
 
