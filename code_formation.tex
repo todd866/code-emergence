@@ -267,7 +267,7 @@ The Fourier basis is convenient analytically but not uniquely privileged. The ke
 
 Future work should test these predictions in experimental systems: does manipulating interface bandwidth (e.g., via optogenetic control of receptor expression) produce the predicted complexity collapse in responding systems?
 
-\section{Supplementary Results: Generality Across Scales and Dynamics}
+\section{Generality Across Scales and Dynamics}
 
 To test the generality of the constraint signature, we extended the simulations in two directions: larger system sizes and alternative dynamics.
 
@@ -292,12 +292,14 @@ where $\sigma(\cdot)$ is a sigmoid activation function, $W$ is a sparse random c
 
 The ``code'' in this context represents transcription factor readout: a low-dimensional projection (via DCT) of one network's expression state constrains the other network's dynamics.
 
-Results (Supplementary Figure S2, $N = 256$ genes):
-\begin{itemize}
-\item $\Neff(A)$ remains constant at $\approx 193$
-\item $\Neff(B)$ collapses from $192$ at $k = 1$ to $121$ at $k = 32$ (37\% reduction)
-\item Mismatch increases modestly (0.22 to 0.37) as bandwidth decreases
-\end{itemize}
+Results (Figure~\ref{fig:grn}, $N = 256$ genes) show the same qualitative signature as the Kuramoto system: $\Neff(A)$ remains constant at $\approx 193$, while $\Neff(B)$ collapses from $192$ at $k = 1$ to $121$ at $k = 32$ (37\% reduction). Mismatch increases modestly (0.22 to 0.37) as bandwidth decreases.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.95\textwidth]{fig_supp_grn_tuned.pdf}
+\caption{Complexity collapse in gene regulatory network dynamics ($N = 256$). (A) Effective dimensionality as a function of code bandwidth. System $A$ (gray) maintains constant complexity while System $B$ (blue) shows 37\% reduction as $k$ decreases. (B) Tracking error (expression difference) increases modestly at low bandwidth. The same constraint signature emerges in a fundamentally different dynamical system.}
+\label{fig:grn}
+\end{figure}
 
 The GRN results demonstrate that complexity collapse under bandwidth-limited coupling is not specific to phase oscillators. The same signature emerges in a fundamentally different dynamical system---one that more directly models gene regulatory interactions. This supports the claim that the constraint mechanism is general, not an artifact of Kuramoto dynamics.
 
@@ -326,7 +328,7 @@ The key insight is that biological codes may function primarily as dimensional v
 
 \section*{Acknowledgments}
 
-[To be added]
+The author thanks the reviewers for constructive feedback. No external funding was received for this work.
 
 \section*{Declaration of generative AI use in the writing process}
 
