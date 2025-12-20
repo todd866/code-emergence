@@ -21,7 +21,7 @@ ax.add_patch(FancyBboxPatch((0.5, 0.3), 2, 1.4, boxstyle="round,pad=0.05",
                              facecolor='#cce5ff', edgecolor='black', linewidth=1.5))
 ax.text(1.5, 1.1, 'System A', ha='center', va='center', fontsize=12, fontweight='bold')
 ax.text(1.5, 0.75, r'$N = 64$ oscillators', ha='center', va='center', fontsize=9)
-ax.text(1.5, 0.5, r'$N_{\mathrm{eff}}(A) \approx 13$', ha='center', va='center', fontsize=9)
+ax.text(1.5, 0.5, r'(autonomous)', ha='center', va='center', fontsize=9, style='italic')
 
 # Bottleneck
 ax.add_patch(FancyBboxPatch((3.5, 0.2), 1.2, 1.6, boxstyle="round,pad=0.02",

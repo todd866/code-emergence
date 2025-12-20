@@ -6,7 +6,17 @@
 
 const fs = require('fs');
 
+// Seeded PRNG for reproducibility (mulberry32)
+let rngState = 42;  // Fixed seed
+function seededRandom() {
+  rngState |= 0; rngState = rngState + 0x6D2B79F5 | 0;
+  let t = Math.imul(rngState ^ rngState >>> 15, 1 | rngState);
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+  return ((t ^ t >>> 14) >>> 0) / 4294967296;
+}
+
 console.log("=== GENERATING JTB PAPER FIGURES ===\n");
+console.log("Using fixed RNG seed: 42 for reproducibility\n");
 
 const N = 64;
 const nTrials = 15;  // More trials for cleaner data
@@ -22,8 +32,8 @@ function createLattice() {
   const theta = new Float32Array(N);
   const omega = new Float32Array(N);
   for (let i = 0; i < N; i++) {
-    theta[i] = Math.random() * 2 * Math.PI - Math.PI;
-    omega[i] = 0.5 + (Math.random() - 0.5) * 0.3;
+    theta[i] = seededRandom() * 2 * Math.PI - Math.PI;
+    omega[i] = 0.5 + (seededRandom() - 0.5) * 0.3;
   }
   return { theta, omega };
 }
@@ -36,7 +46,7 @@ function stepLattice(lattice, K, noise, dt) {
     const left = (i - 1 + N) % N;
     const right = (i + 1) % N;
     let coupling = Math.sin(theta[left] - theta[i]) + Math.sin(theta[right] - theta[i]);
-    const u1 = Math.random(), u2 = Math.random();
+    const u1 = seededRandom(), u2 = seededRandom();
     const eta = Math.sqrt(-2 * Math.log(u1 + 1e-10)) * Math.cos(2 * Math.PI * u2);
     // Deterministic terms scale with dt; stochastic term scales with sqrt(dt)
     theta[i] += dt * (omega[i] + K * coupling) + sqrtDt * noise * eta;
@@ -130,7 +140,7 @@ function stepCoupled(A, B, k, K, lambda, noise, dt) {
     const right = (i + 1) % N;
     let coupling = Math.sin(theta[left] - theta[i]) + Math.sin(theta[right] - theta[i]);
     const codeConstraint = lambda * Math.sin(targetPhase[i] - theta[i]);
-    const u1 = Math.random(), u2 = Math.random();
+    const u1 = seededRandom(), u2 = seededRandom();
     const eta = Math.sqrt(-2 * Math.log(u1 + 1e-10)) * Math.cos(2 * Math.PI * u2);
     // Deterministic terms scale with dt; stochastic term scales with sqrt(dt)
     theta[i] += dt * (omega[i] + K * coupling + codeConstraint) + sqrtDt * noise * 0.5 * eta;
@@ -279,7 +289,7 @@ function createRandomProjection(k) {
   for (let m = 1; m <= N / 2; m++) allModes.push(m);
   // Fisher-Yates shuffle
   for (let i = allModes.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(seededRandom() * (i + 1));
     [allModes[i], allModes[j]] = [allModes[j], allModes[i]];
   }
   return allModes.slice(0, k);
@@ -331,7 +341,7 @@ function stepCoupledRandom(A, B, randomModes, K, lambda, noise, dt) {
     const right = (i + 1) % N;
     let coupling = Math.sin(theta[left] - theta[i]) + Math.sin(theta[right] - theta[i]);
     const codeConstraint = lambda * Math.sin(targetPhase[i] - theta[i]);
-    const u1 = Math.random(), u2 = Math.random();
+    const u1 = seededRandom(), u2 = seededRandom();
     const eta = Math.sqrt(-2 * Math.log(u1 + 1e-10)) * Math.cos(2 * Math.PI * u2);
     // Deterministic terms scale with dt; stochastic term scales with sqrt(dt)
     theta[i] += dt * (omega[i] + K * coupling + codeConstraint) + sqrtDt * noise * 0.5 * eta;

@@ -145,6 +145,7 @@ The bandwidth-limited reconstruction is obtained by inverting with only the reta
 \begin{equation}
 \hat{\theta}^A_i = \arg\left(\sum_{m=0}^{k} C_m e^{i 2\pi m i / N}\right).
 \end{equation}
+We define bandwidth $k$ as the maximum retained mode index (including DC), so the code contains $k+1$ complex coefficients.
 
 This architecture (Figure~\ref{fig:schematic}) captures the essential structure: two high-dimensional systems coupled through a low-dimensional interface. The bandwidth $k$ is a tunable parameter controlling code dimensionality.
 
