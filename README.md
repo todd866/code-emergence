@@ -18,15 +18,15 @@ Using coupled oscillator and gene regulatory network simulations, we demonstrate
 
 ```
 ├── code_formation.tex        # Main manuscript (LaTeX)
-├── code_formation.pdf        # Compiled manuscript (20 pages)
+├── code_formation.pdf        # Compiled manuscript (22 pages)
 ├── cover_letter.pdf          # PBMB cover letter
 ├── references.bib            # Bibliography
 ├── code/
-│   ├── generate_figures.js   # Main simulation (Node.js, N=64)
-│   ├── plot_figures.py       # Figure plotting (Python)
-│   ├── scalable_simulation.py  # Large-scale sims (N=512-1024)
-│   ├── grn_tuned.py          # Gene regulatory network dynamics
-│   └── create_schematic.py   # Figure 1 schematic
+│   ├── generate_figures.js       # Main simulation (Node.js, N=64)
+│   ├── plot_figures.py           # Figure plotting (Python)
+│   ├── supplementary_simulations.py  # All supplementary sims
+│   ├── create_schematic.py       # Figure 1 schematic
+│   └── create_reconstruction_comparison.py  # Reconstruction figure
 └── figures/
     ├── fig_*.pdf             # Main manuscript figures
     └── fig_supp_*.pdf        # Supplementary figures
@@ -45,14 +45,12 @@ node generate_figures.js
 python plot_figures.py
 ```
 
-### Large-scale simulations (N=512-1024)
+### Supplementary simulations
 ```bash
-python scalable_simulation.py  # ~30 seconds
-```
-
-### Gene regulatory network dynamics
-```bash
-python grn_tuned.py  # ~60 seconds
+python supplementary_simulations.py --all    # All supplementary (~2 min)
+python supplementary_simulations.py --large  # Large-scale Kuramoto (N=512-1024)
+python supplementary_simulations.py --grn    # Gene regulatory network (N=256)
+python supplementary_simulations.py --metrics  # Alternative complexity metrics
 ```
 
 ## Key Results

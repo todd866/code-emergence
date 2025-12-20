@@ -116,6 +116,13 @@ Recent work on neural manifolds supports this view: population activity is confi
 
 We now formalize the constraint mechanism using a minimal model: two coupled lattices of phase oscillators where interaction is restricted to a bandwidth-limited projection.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.9\textwidth]{fig_schematic.pdf}
+\caption{Model architecture. System $A$ (driving) couples to System $B$ (responding) only through a bandwidth-limited code $C_k$ consisting of $k$ Fourier modes. The code constrains $B$'s dynamics without transmitting full state information.}
+\label{fig:schematic}
+\end{figure}
+
 \subsection{Model Architecture}
 
 Consider two systems, each a one-dimensional lattice of $N$ locally coupled phase oscillators. System $A$ (the ``driving'' system) evolves autonomously:
@@ -134,12 +141,16 @@ The code $C_k$ consists of the first $k$ Fourier modes of $A$'s phase field:
 \begin{equation}
 C_m = \frac{1}{N} \sum_{i=1}^{N} e^{i\theta^A_i} e^{-i 2\pi m i / N}, \quad m = 0, \ldots, k.
 \end{equation}
+The bandwidth-limited reconstruction is obtained by inverting with only the retained modes:
+\begin{equation}
+\hat{\theta}^A_i = \arg\left(\sum_{m=0}^{k} C_m e^{i 2\pi m i / N}\right).
+\end{equation}
 
-This architecture captures the essential structure: two high-dimensional systems coupled through a low-dimensional interface. The bandwidth $k$ is a tunable parameter controlling code dimensionality.
+This architecture (Figure~\ref{fig:schematic}) captures the essential structure: two high-dimensional systems coupled through a low-dimensional interface. The bandwidth $k$ is a tunable parameter controlling code dimensionality.
 
 \subsection{Quantifying Complexity and Tracking}
 
-We measure \textit{effective dimensionality} via spectral entropy of the Fourier amplitude spectrum. Specifically, the amplitude $|C_m|$ of each Fourier mode is computed, normalized to form a probability distribution $p_m = |C_m| / \sum_m |C_m|$, and the Shannon entropy $H = -\sum_m p_m \log p_m$ is calculated. The effective dimensionality is then $\Neff = e^H$, which gives the \textit{effective support size}---the number of modes that contribute substantially to the dynamics, weighted by their relative amplitudes. This is not a topological dimension but a complexity measure analogous to the participation ratio in localization theory. The same qualitative results obtain using alternative metrics (e.g., participation ratio of the power spectrum, or counting modes above a threshold).
+We measure \textit{effective dimensionality} via spectral entropy of the Fourier amplitude spectrum. Specifically, the amplitude $|C_m|$ of each Fourier mode is computed, normalized to form a probability distribution $p_m = |C_m| / \sum_m |C_m|$, and the Shannon entropy $H = -\sum_m p_m \log p_m$ is calculated. The effective dimensionality is then $\Neff = e^H$, which gives the \textit{effective support size}---the number of modes that contribute substantially to the dynamics, weighted by their relative amplitudes. This is not a topological dimension but a complexity measure analogous to the participation ratio in localization theory. The same qualitative results obtain using alternative metrics---PCA participation ratio (covariance-based), spatial gradient energy, and Kuramoto order parameter---none of which depend on the Fourier basis (Supplementary Figure S3). This confirms that complexity collapse is not an artifact of measuring complexity in the same basis as the code.
 
 \textit{Tracking quality} is measured as mean circular distance between systems: $\Delta = N^{-1} \sum_i |\sin((\theta^A_i - \theta^B_i)/2)|$.
 
@@ -289,6 +300,21 @@ Results (Supplementary Figure S2, $N = 256$ genes):
 \end{itemize}
 
 The GRN results demonstrate that complexity collapse under bandwidth-limited coupling is not specific to phase oscillators. The same signature emerges in a fundamentally different dynamical system---one that more directly models gene regulatory interactions. This supports the claim that the constraint mechanism is general, not an artifact of Kuramoto dynamics.
+
+\subsection{Alternative Complexity Metrics}
+
+A potential concern is that measuring complexity via spectral entropy of Fourier amplitudes is tautological, since the code is also Fourier-based. We therefore computed three additional metrics that do not depend on the Fourier basis (Supplementary Figure S3):
+\begin{itemize}
+\item \textbf{PCA participation ratio}: effective dimensionality from covariance eigenvalues, $D_{\mathrm{eff}} = (\sum \lambda)^2 / \sum \lambda^2$
+\item \textbf{Spatial gradient energy}: mean squared phase gradient $\langle |\nabla \theta|^2 \rangle$, measuring spatial smoothness
+\item \textbf{Kuramoto order parameter}: global synchrony $R = |\langle e^{i\theta} \rangle|$
+\end{itemize}
+
+All three metrics show the same qualitative pattern: System $B$'s organization changes systematically with code bandwidth (lower gradient energy and higher order at low $k$), while System $A$ remains constant. This confirms that complexity collapse is a genuine dynamical phenomenon, not an artifact of the measurement basis.
+
+\subsection{Coupling Strength Robustness}
+
+We verified that the qualitative pattern persists across a range of coupling strengths $\lambda \in [0.25, 4.0]$ (Supplementary Figure S4). Stronger coupling produces greater complexity collapse and tighter tracking, but the signature---complexity collapse with bounded mismatch---appears across the tested range.
 
 \section{Conclusion}
 
