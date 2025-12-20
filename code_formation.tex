@@ -32,30 +32,36 @@ Sydney, NSW, Australia\\
 \maketitle
 
 \begin{abstract}
-Biological systems operate in high-dimensional state spaces---protein conformational ensembles, gene regulatory networks, neural population dynamics---yet experimentalists routinely characterize them through low-dimensional observables: order parameters, principal components, expression markers. This dimensional mismatch creates a fundamental problem: when does a low-dimensional readout faithfully represent the underlying system, and when does it systematically distort our understanding? This perspective synthesizes insights from dynamical systems theory, statistical mechanics, and information theory to propose a unifying framework: low-dimensional codes function as \textit{stabilizing constraints} rather than predictive representations. Using coupled oscillator simulations as a minimal model, we demonstrate that bandwidth-limited coupling induces systematic complexity collapse in responding systems while maintaining bounded tracking---a signature distinct from information loss or prediction failure. The constraining effect requires structured projections that capture coherent collective variables; random projections of the same dimensionality fail. We connect this mechanism to concrete biophysical contexts: protein folding landscapes, single-cell state manifolds, morphogenetic fields, and neural coding. The framework suggests that biological coding structures---from genetic regulatory motifs to homeostatic setpoints---may function primarily as dimensional constraints that enable persistent organization, rather than as channels optimized for information transmission. This perspective offers practical criteria for distinguishing when coarse-grained models are reliable versus when they become ``shadows'' of latent dynamics.
+A recurring problem spans biophysics, systems biology, and neuroscience: high-dimensional systems (protein ensembles, gene networks, neural populations) are characterized through low-dimensional descriptions (order parameters, principal components, expression markers), yet the relationship between interface and underlying dynamics remains poorly understood. When is dimensional reduction faithful compression versus systematic distortion? Why do some low-dimensional codes work while others fail?
+
+This review proposes a unifying interpretation: low-dimensional interfaces between coupled systems function as \textit{stabilizing constraints} rather than information channels. We synthesize evidence from dynamical systems theory, statistical mechanics, and information theory to argue that the recurring interpretive problems arise from a common source---the assumption that dimensional reduction preserves information rather than imposing constraints.
+
+Using coupled oscillator simulations as a minimal physical exemplar, we demonstrate a characteristic signature of constraint: bandwidth-limited coupling induces systematic complexity collapse in responding systems while maintaining bounded tracking. Critically, this requires structured projections that capture coherent collective variables; random projections of the same dimensionality produce the opposite effect (whitening, not collapse). The same signature appears in gene regulatory network dynamics, confirming generality beyond oscillatory systems.
+
+We connect this mechanism to protein folding, single-cell manifolds, morphogenetic fields, and neural coding, and offer practical criteria for researchers: how to choose reaction coordinates, interpret manifold structure, design multi-scale interfaces, and distinguish constraint from information. The framework suggests that biological codes function primarily as dimensional valves enabling persistent organization, rather than as channels optimized for information transmission.
 \end{abstract}
 
 \noindent\textbf{Keywords:} Dimensional reduction, coarse-graining, biological codes, constraint dynamics, order parameters, model identifiability
 
-\section{The Dimensional Mismatch Problem}
+\section{A Common Problem Across Fields}
 
-Modern biology confronts a general tension. The systems we study---proteins, cells, tissues, neural circuits---operate in state spaces of enormous dimensionality. A modest protein explores a conformational landscape with thousands of degrees of freedom. A single cell's transcriptome spans tens of thousands of genes. A cortical column contains millions of synapses. Yet our experimental readouts are inevitably low-dimensional: we measure order parameters, principal components, marker genes, population firing rates.
+Across biophysics, systems biology, and neuroscience, a recurring tension appears: the systems we study operate in high-dimensional state spaces, yet we characterize them through low-dimensional descriptions. This dimensional mismatch is not merely a practical limitation—it generates systematic interpretive problems that recur across domains.
 
-This dimensional mismatch is not merely a practical limitation---it creates systematic interpretive challenges:
+\textbf{In protein biophysics}, conformational ensembles explore thousands of degrees of freedom, yet function is characterized by a handful of order parameters. Reaction coordinates that appear to govern folding kinetics may hide multiple parallel pathways \citep{pande2010}. Parameter estimation is generically ``sloppy''—many parameter combinations produce indistinguishable low-dimensional outputs \citep{gutenkunst2007,transtrum2015}. The question of when order-parameter descriptions are reliable has been extensively studied, yet remains unresolved \citep{best2005,noe2017}.
 
-\begin{itemize}
-\item \textbf{Model identifiability}: Parameter estimation in high-dimensional systems is generically ``sloppy''---many parameter combinations produce indistinguishable low-dimensional outputs \citep{gutenkunst2007,transtrum2015}.
+\textbf{In single-cell genomics}, RNA sequencing reveals that cell states occupy low-dimensional manifolds embedded in $\sim$20,000-dimensional gene expression space \citep{trapnell2015,weinreb2018}. Yet dimensionality reduction techniques can create spurious clusters, collapse distinct states, and distort neighborhood relationships \citep{chari2023,kobak2021,cooley2019}. Pseudotime analyses and trajectory inference rely on manifold structure that may reflect technical artifacts rather than biological reality.
 
-\item \textbf{Projection artifacts}: Dimensionality reduction techniques (PCA, t-SNE, UMAP) can create spurious clusters, collapse distinct states, and distort neighborhood relationships \citep{chari2023,kobak2021}.
+\textbf{In developmental biology}, tissues coordinate through field-like gradients—morphogen concentrations, bioelectric potentials, mechanical stresses \citep{levin2021,turing1952}. These fields may themselves possess rich, high-dimensional dynamics at molecular and ionic scales, yet individual cells respond to local values through bandwidth-limited interfaces (ion channels, receptors). The mismatch between field complexity and cellular readout is structural, not merely practical.
 
-\item \textbf{Observables vs.\ latent dynamics}: Order parameters that appear to govern dynamics may be shadows of higher-dimensional processes, leading to apparent ``downward causation'' that dissolves under finer measurement \citep{flack2017,balduzzi2008}.
-\end{itemize}
+\textbf{In neuroscience}, neural populations fire in high-dimensional pattern spaces, yet must coordinate across distant brain regions through apparent low-dimensional codes \citep{gallego2017,sadtler2014}. Order parameters that appear to govern dynamics may be shadows of higher-dimensional processes \citep{flack2017,balduzzi2008}. Learning requires either operating within existing neural manifolds or expanding them—a constraint whose origin remains unclear.
 
-These problems span biophysics, systems biology, and neuroscience. When can we trust a low-dimensional model? When is dimensional reduction a faithful compression versus a systematic distortion?
+These problems share a common structure: high-dimensional systems coupled through low-dimensional interfaces, where the relationship between interface and underlying dynamics is poorly understood. When can we trust a low-dimensional model? When is dimensional reduction a faithful compression versus a systematic distortion?
 
-\subsection{A Unifying Perspective: Codes as Constraints}
+\subsection{This Review: Codes as Constraints}
 
-This paper proposes a framework for understanding dimensional mismatch in biological systems. The core insight is that low-dimensional interfaces between coupled systems function as \textit{stabilizing constraints} rather than information channels.
+This review proposes a unifying interpretation of these phenomena, rather than a new biological mechanism. We synthesize insights from dynamical systems theory, statistical mechanics, and information theory to argue that the recurring problems above arise from a common source: the assumption that dimensional reduction preserves information rather than imposing constraints.
+
+The core reframing is that low-dimensional interfaces between coupled systems function as \textit{stabilizing constraints} rather than information channels.
 
 Consider any biological interface: a cell membrane transducing environmental signals, a morphogenetic gradient coordinating tissue development, a neural code coupling sensory input to motor output. In each case, a high-dimensional ``driving'' system couples to a high-dimensional ``responding'' system through a low-dimensional bottleneck. The question is: what does this bottleneck \textit{do}?
 
@@ -112,9 +118,9 @@ A key insight emerges from oscillatory dynamics: low-frequency oscillations can 
 
 Population coding theories typically frame neural activity as \textit{representing} task variables \citep{georgopoulos1986,pouget2000}. An alternative framing asks which aspects of population activity \textit{constrain} downstream processing. Recent work on neural manifolds shows that population activity is confined to low-dimensional subspaces \citep{gallego2017,sadtler2014}. But these manifolds may reflect the bandwidth limitations of inter-regional coupling rather than intrinsic computational simplicity. Learning a new behavior requires either operating within the existing manifold or expanding it---a constraint imposed by the coupling interface, not just a summary of neural activity.
 
-\section{A Minimal Model of Code-Constraint Dynamics}
+\section{A Minimal Physical Exemplar}
 
-We now formalize the constraint mechanism using a minimal model: two coupled lattices of phase oscillators where interaction is restricted to a bandwidth-limited projection.
+To make the constraint interpretation concrete, we demonstrate its signature in a minimal model: two coupled lattices of phase oscillators where interaction is restricted to a bandwidth-limited projection. This is not intended as a model of any specific biological system, but as a \textit{didactic exemplar}—a physically realizable system that exhibits the constraint mechanism in a form amenable to precise measurement. The same qualitative signature emerges in gene regulatory network dynamics (Section~7.2), confirming that the mechanism is not specific to oscillatory dynamics.
 
 \begin{figure}[ht]
 \centering
@@ -319,15 +325,31 @@ All three metrics show the same qualitative pattern: System $B$'s organization c
 
 We verified that the qualitative pattern persists across a range of coupling strengths $\lambda \in [0.25, 4.0]$ (Supplementary Figure S4). Stronger coupling produces greater complexity collapse and tighter tracking, but the signature---complexity collapse with bounded mismatch---appears across the tested range.
 
+\section{Implications for Practice}
+
+The constraint interpretation suggests practical changes to how researchers across fields approach low-dimensional descriptions. We offer these not as prescriptions but as reframings that may prove useful.
+
+\textbf{Choosing reaction coordinates in molecular dynamics:} The standard criterion for a good reaction coordinate is that it captures the slowest relaxation timescale (i.e., separates folded from unfolded). The constraint perspective suggests an additional criterion: does the coordinate \textit{restrict accessible conformational dynamics} in the bound or functional state? A coordinate that merely summarizes the ensemble (thermometer) differs from one that actively constrains it (thermostat). The signature would be complexity collapse in conformational fluctuations when the coordinate is held fixed.
+
+\textbf{Interpreting single-cell manifolds:} When UMAP or diffusion maps reveal low-dimensional structure, the standard interpretation is that this reflects underlying regulatory simplicity. The constraint perspective suggests an alternative: low-dimensional structure may reflect bandwidth limitations of inter-cellular coupling (e.g., signaling through a limited number of receptor types). Testing this would involve comparing manifold dimensionality in tissues with different coupling architectures.
+
+\textbf{Designing interfaces between models:} Multi-scale modeling often couples coarse and fine scales through ad hoc ``handshaking'' variables. The constraint framework suggests a principled criterion: the interface should select coherent collective variables that induce complexity collapse in the fine-scale system without unbounded tracking error. Random or arbitrary coupling will fail this test.
+
+\textbf{Understanding why some low-D codes work:} Neural population codes, morphogenetic gradients, and genetic regulatory motifs all achieve robust function through low-dimensional interfaces. The constraint interpretation explains \textit{why} they work: they capture coherent collective variables that constrain downstream dynamics onto viable trajectories. Codes fail when they project onto incoherent modes that cannot stabilize the responding system.
+
+\textbf{Distinguishing constraint from information:} Mutual information measures how much an observer can learn about one system from another. But a thermostat and a thermometer have the same mutual information with temperature—only one constrains it. When evaluating biological codes, ask: does reducing the code's bandwidth produce complexity collapse (constraint) or tracking failure (information loss)? The two functions are distinct and should not be conflated.
+
 \section{Conclusion}
 
-We have proposed a framework for understanding dimensional mismatch in biological systems. Low-dimensional interfaces between coupled high-dimensional systems function as stabilizing constraints rather than information channels. The signature of effective constraint is complexity collapse with bounded tracking: the responding system's effective dimensionality decreases systematically with code bandwidth while maintaining alignment with the driving system's coarse-grained representation.
+This review has argued that the recurring interpretive problems surrounding dimensional mismatch in biology---sloppiness in protein modeling, artifacts in single-cell manifolds, shadows in neural codes---arise from a common source: the assumption that dimensional reduction preserves information rather than imposing constraints.
 
-This framework offers a unifying lens for diverse phenomena---protein folding landscapes, single-cell manifolds, morphogenetic gradients, neural population codes---and provides practical criteria for evaluating when low-dimensional models are reliable versus when they become shadows of richer dynamics.
+We proposed a unifying interpretation: low-dimensional interfaces between coupled high-dimensional systems function as stabilizing constraints rather than information channels. The signature of effective constraint is complexity collapse with bounded tracking: the responding system's effective dimensionality decreases systematically with code bandwidth while maintaining alignment with the coarse-grained representation. Critically, this requires structured projections onto coherent collective variables; random projections fail.
+
+The framework offers practical guidance across fields: criteria for choosing reaction coordinates in molecular dynamics, for interpreting manifold structure in single-cell data, for designing interfaces in multi-scale models, and for distinguishing constraint from information in any coding system. The key question is not ``how much information does the code preserve?'' but ``does the code constrain downstream dynamics onto viable trajectories?''
 
 Beyond biology, this architecture suggests a blueprint for \textit{neuromorphic constraint computing}, where system states are controlled not by precise error-correction of individual bits, but by shaping the topological manifolds of high-dimensional substrates.
 
-The key insight is that biological codes may function primarily as dimensional valves that enable persistent organization, rather than as channels optimized for information transmission. Constraint and representation are distinct functions, and conflating them may systematically mislead our understanding of biological organization.
+The deeper insight may be that biological codes are not optimized for information transmission at all. They are dimensional valves that enable persistent organization by constraining what responding systems can do. Constraint and representation are distinct functions, and conflating them has systematically misled our understanding of biological organization.
 
 \section*{Acknowledgments}
 
