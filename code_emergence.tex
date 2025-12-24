@@ -1,0 +1,472 @@
+\documentclass[12pt]{article}
+
+% Information Geometry (Springer) formatting
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[numbers,square]{natbib}
+\usepackage{booktabs}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+% Custom commands
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\F}{\mathcal{F}}
+
+\title{Quotient Geometry of Statistical Manifolds Under Dimensional Collapse}
+
+\author{Ian Todd\\
+Sydney Medical School, University of Sydney\\
+\texttt{itod2305@uni.sydney.edu.au}}
+
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We develop the quotient geometry of statistical manifolds under collapse maps---smooth maps $\pi: \M \to \R^k$ with $k < \dim(\M)$. The main results are: (1) a \emph{fiber structure theorem} showing that the vertical distribution $\mathcal{V} = \ker(d\pi)$ foliates $\M$ into submanifolds along which the Fisher metric becomes degenerate, with points on the same fiber being statistically non-identifiable in the sense of Watanabe; (2) a \emph{quotient metric theorem} establishing when the Fisher metric descends to a well-defined Riemannian metric on the quotient $\M/\sim_\pi$, and characterizing obstructions in terms of $\alpha$-connection geometry; and (3) \emph{covering number bounds} relating the metric geometry of the quotient to the number of distinguishable equivalence classes at finite resolution. We show that a recent result on minimal embedding dimension for recurrent processes is a special case of this framework. The theory provides a unified geometric treatment of dimensional reduction, sufficient statistics, and singularities in statistical models.
+\end{abstract}
+
+\noindent\textbf{Keywords:} information geometry, quotient manifolds, Fisher metric, dimensional reduction, singular statistical models
+
+%==============================================================================
+\section{Introduction}
+%==============================================================================
+
+When a statistical manifold is observed through a lower-dimensional map, what geometric structure survives? This paper develops the quotient geometry of statistical manifolds under \emph{collapse maps}---smooth maps $\pi: \M \to \R^k$ with $k < \dim(\M)$ that reduce dimension while preserving some statistical content.
+
+The question connects to several classical themes in information geometry:
+\begin{itemize}
+    \item \textbf{Sufficient statistics:} A sufficient statistic $T: \mathcal{X} \to \R^k$ induces a collapse map on the parameter space. The quotient structure encodes which parameters are identifiable from $T$.
+    \item \textbf{Singular models:} When parameters are non-identifiable, the Fisher information matrix becomes singular. Watanabe's algebraic geometry of singular learning \citep{watanabe2009algebraic} characterizes this; we provide the differential-geometric complement.
+    \item \textbf{Embedding theorems:} Classical results (Whitney, Takens) bound the dimension needed to embed manifolds without self-intersection. Recent work \citep{todd2025minimal} established analogous bounds for statistical manifolds; the quotient structure explains what happens below those bounds.
+\end{itemize}
+
+\subsection{Main Contributions}
+
+We establish three main results:
+
+\begin{enumerate}
+    \item \textbf{Fiber Structure Theorem} (Theorem~\ref{thm:fiber}): A collapse map $\pi$ with constant rank $r$ foliates $\M$ into $(n-r)$-dimensional fibers. The Fisher metric is degenerate along fibers: points on the same fiber yield identical projected distributions and cannot be distinguished by any estimator based on projected observations.
+
+    \item \textbf{Quotient Metric Theorem} (Theorem~\ref{thm:quotient-metric}): Under regularity conditions, the Fisher metric descends to a well-defined Riemannian metric on the quotient space $\M/\sim_\pi$. We characterize when this descent is compatible with the $\alpha$-connection structure and identify obstructions arising from non-trivial holonomy.
+
+    \item \textbf{Covering Number Bounds} (Theorem~\ref{thm:covering}): The number of $\varepsilon$-distinguishable classes scales as $N(\varepsilon) \sim C \cdot \text{Vol}(\M) / \varepsilon^r$, where $r$ is the projection rank. This quantifies the ``effective alphabet size'' induced by dimensional collapse.
+\end{enumerate}
+
+\subsection{Relation to Prior Work}
+
+This paper and a companion work \citep{todd2025minimal} form a two-step program:
+\begin{itemize}
+    \item \textbf{Companion paper:} establishes a specific phenomenon---cyclic processes with monotone meta-time require embedding dimension $k \geq 3$ to avoid self-intersection; at $k \leq 2$, temporally distinct states are necessarily conflated.
+    \item \textbf{This paper:} provides the general quotient-geometric framework that makes that phenomenon inevitable. The minimal embedding result drops out of Theorem~\ref{thm:covering} as a special case (Corollary~\ref{cor:embedding}).
+\end{itemize}
+
+\noindent The genuinely new contributions of the present work are:
+\begin{itemize}
+    \item \textbf{Quotient metric descent criteria:} characterizing when the Fisher metric descends to the quotient via bundle-like or totally geodesic conditions (Theorem~\ref{thm:quotient-metric}).
+    \item \textbf{$\alpha$-connection obstruction framing:} identifying when dual connections survive collapse (Proposition~\ref{prop:alpha}).
+    \item \textbf{Covering numbers as capacity:} the scaling $N(\varepsilon) \sim \varepsilon^{-r}$ provides an operational measure of distinguishable equivalence classes (Theorem~\ref{thm:covering}).
+\end{itemize}
+
+The framework also connects to:
+\begin{itemize}
+    \item Chentsov's uniqueness theorem \citep{chentsov1982statistical}: the Fisher metric is the unique Riemannian metric (up to scale) invariant under sufficient statistics. Our quotient construction respects this invariance.
+    \item Amari's $\alpha$-geometry \citep{amari2016information}: we show how dual connections transform under collapse maps and identify conditions for the dually flat structure to survive.
+    \item Watanabe's singular learning theory \citep{watanabe2009algebraic}: our fiber structure provides the differential-geometric setting for his algebraic singularities.
+\end{itemize}
+
+%==============================================================================
+\section{Preliminaries}
+\label{sec:prelim}
+%==============================================================================
+
+\subsection{Statistical Manifolds}
+
+Let $\M = \{p_\theta : \theta \in \Theta\}$ be a parametric family of probability distributions on a sample space $\mathcal{X}$, where $\Theta \subseteq \R^n$ is an open subset. Under standard regularity conditions (the family is identifiable, $\theta \mapsto p_\theta$ is smooth, expectations can be differentiated under the integral sign), $\M$ carries the structure of a Riemannian manifold with the \emph{Fisher information metric}:
+\begin{equation}
+    g_{ij}(\theta) = \mathbb{E}_{p_\theta}\left[\frac{\partial \log p_\theta}{\partial \theta^i} \frac{\partial \log p_\theta}{\partial \theta^j}\right] = -\mathbb{E}_{p_\theta}\left[\frac{\partial^2 \log p_\theta}{\partial \theta^i \partial \theta^j}\right].
+\end{equation}
+
+The Fisher metric has fundamental statistical meaning: the geodesic distance $d_g(\theta, \theta')$ measures the difficulty of distinguishing $p_\theta$ from $p_{\theta'}$ based on finite samples. Specifically, the Cram\'er-Rao bound states that any unbiased estimator $\hat{\theta}$ of $\theta$ satisfies $\text{Cov}(\hat{\theta}) \geq g^{-1}(\theta)$.
+
+\subsection{The $\alpha$-Connection Family}
+
+Beyond the metric, statistical manifolds carry a one-parameter family of affine connections. The \emph{$\alpha$-connection} $\nabla^{(\alpha)}$ is defined by:
+\begin{equation}
+    \Gamma^{(\alpha)}_{ij,k} = \mathbb{E}_{p_\theta}\left[\left(\frac{\partial^2 \log p_\theta}{\partial \theta^i \partial \theta^j} + \frac{1-\alpha}{2}\frac{\partial \log p_\theta}{\partial \theta^i}\frac{\partial \log p_\theta}{\partial \theta^j}\right)\frac{\partial \log p_\theta}{\partial \theta^k}\right].
+\end{equation}
+
+Key special cases:
+\begin{itemize}
+    \item $\alpha = 0$: the Levi-Civita connection of the Fisher metric.
+    \item $\alpha = 1$: the exponential (e-)connection, flat in exponential families.
+    \item $\alpha = -1$: the mixture (m-)connection, flat in mixture families.
+\end{itemize}
+
+The connections $\nabla^{(\alpha)}$ and $\nabla^{(-\alpha)}$ are \emph{dual} with respect to $g$:
+\begin{equation}
+    X g(Y, Z) = g(\nabla^{(\alpha)}_X Y, Z) + g(Y, \nabla^{(-\alpha)}_X Z).
+\end{equation}
+
+When both $\nabla^{(1)}$ and $\nabla^{(-1)}$ are flat (as in exponential families), the manifold is \emph{dually flat}, enabling powerful computational tools.
+
+\subsection{Chentsov's Theorem}
+
+A fundamental result of Chentsov \citep{chentsov1982statistical} states that the Fisher metric is essentially unique:
+
+\begin{theorem}[Chentsov]
+The Fisher information metric is the unique Riemannian metric on finite sample spaces (up to a positive constant) that is invariant under sufficient statistics. That is, if $T: \mathcal{X} \to \mathcal{Y}$ is a sufficient statistic for $\{p_\theta\}$, and $\tilde{g}$ is the Fisher metric on the induced family $\{\tilde{p}_\theta\}$ on $\mathcal{Y}$, then the natural map $\M \to \tilde{\M}$ is an isometry.
+\end{theorem}
+
+This theorem constrains how the Fisher metric can transform under dimensional reduction: any ``natural'' collapse must respect the sufficient statistic structure.
+
+\subsection{Notation Summary}
+
+For clarity, we summarize the key objects introduced in this paper:
+
+\begin{center}
+\begin{tabular}{cl}
+\toprule
+\textbf{Symbol} & \textbf{Description} \\
+\midrule
+$\M$ & Full statistical manifold with parameters $\theta \in \Theta \subset \R^n$ \\
+$g$ & Fisher metric on $\M$ (the full model) \\
+$\pi: \M \to \R^k$ & Collapse map ($k < n$, smooth surjective submersion) \\
+$\tilde{p}_y$ & Collapsed family: $p_\theta = \tilde{p}_{\pi(\theta)}$ \\
+$\tilde{g}$ & Fisher metric of the collapsed model on $\pi(\M)$ \\
+$g_{\text{obs}} = \pi^* \tilde{g}$ & Pullback (observed) metric on $\M$; has rank $r \leq k$ \\
+$\mathcal{V} = \ker(d\pi)$ & Vertical distribution (tangent to fibers) \\
+$\mathcal{H} = \mathcal{V}^\perp$ & Horizontal distribution ($g$-orthogonal to fibers) \\
+$\bar{g}$ & Quotient metric on $\M/{\sim_\pi}$ (when it exists) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+%==============================================================================
+\section{Collapse Maps and Fiber Structure}
+\label{sec:collapse}
+%==============================================================================
+
+\subsection{Statistical Collapse via Observation}
+
+Dimensional collapse in statistical models arises from observation: when we observe a system through a lower-dimensional statistic, parameters that produce identical observed distributions become indistinguishable.
+
+\begin{definition}[Observation-Induced Equivalence]
+Let $T: \mathcal{X} \to \mathcal{Y}$ be a measurable map (a statistic or observation). This induces an equivalence relation on the parameter space:
+\begin{equation}
+    \theta_1 \sim_T \theta_2 \iff T_* p_{\theta_1} = T_* p_{\theta_2},
+\end{equation}
+where $T_* p_\theta$ denotes the pushforward (induced distribution) of $p_\theta$ under $T$.
+\end{definition}
+
+When this equivalence relation has ``regular'' level sets, the quotient $\M/{\sim_T}$ inherits the structure of a lower-dimensional statistical manifold $\widetilde{\M}$, and we obtain a natural projection $F: \M \to \widetilde{\M}$.
+
+\begin{definition}[Collapse Map]\label{def:collapse}
+A \emph{collapse map} is a smooth surjective submersion $\pi: \M \to \R^k$ with $k < \dim(\M)$ such that the statistical family factors through $\pi$: there exists a family $\{\tilde{p}_y : y \in \pi(\M)\}$ with $p_\theta = \tilde{p}_{\pi(\theta)}$ for all $\theta \in \M$.
+
+Equivalently, $\pi(\theta_1) = \pi(\theta_2)$ implies $p_{\theta_1} = p_{\theta_2}$. The map $\pi$ serves as a coordinate representation of the quotient structure.
+\end{definition}
+
+Collapse maps arise naturally in several contexts:
+\begin{itemize}
+    \item \textbf{Sufficient statistics:} If $T: \mathcal{X} \to \mathcal{Y}$ is sufficient, the family factors through $T_* p_\theta$, inducing a collapse map on parameter space.
+    \item \textbf{Marginalization:} Projecting a joint distribution to a marginal: $(\theta_X, \theta_Y) \mapsto \theta_X$.
+    \item \textbf{Curved exponential families:} When a full exponential family is restricted to a submanifold, the natural parameters outside the submanifold become non-identifiable.
+\end{itemize}
+
+\subsection{Vertical and Horizontal Distributions}
+
+Given a collapse map $\pi: \M \to \R^k$, the \emph{vertical distribution} is the subbundle of $T\M$:
+\begin{equation}
+    \mathcal{V} = \ker(d\pi) = \{v \in T_\theta\M : d\pi_\theta(v) = 0\}.
+\end{equation}
+This consists of tangent directions along which $\pi$---and hence the observed distribution---is locally constant.
+
+The \emph{horizontal distribution} is the $g$-orthogonal complement:
+\begin{equation}
+    \mathcal{H} = \mathcal{V}^\perp = \{v \in T_\theta\M : g(v, w) = 0 \text{ for all } w \in \mathcal{V}_\theta\}.
+\end{equation}
+
+At each point, $T_\theta\M = \mathcal{V}_\theta \oplus \mathcal{H}_\theta$.
+
+\subsection{Fiber Structure Theorem}
+
+\begin{theorem}[Fiber Structure and Non-Identifiability]\label{thm:fiber}
+Let $\pi: \M \to \R^k$ be a collapse map (Definition~\ref{def:collapse}) with constant rank $r \leq k$ on a neighborhood $U \subset \M$. Let $g$ denote the Fisher metric of the full model on $\M$, and let $\tilde{g}$ denote the Fisher metric of the collapsed model $\{\tilde{p}_y\}$ on $\pi(U) \subset \R^k$. Then:
+\begin{enumerate}
+    \item[(i)] \textbf{Foliation:} The vertical distribution $\mathcal{V} = \ker(d\pi)$ has dimension $n - r$ at each point and is integrable. Its integral submanifolds---the \emph{fibers} $\pi^{-1}(y)$ for $y \in \pi(U)$---foliate $U$.
+
+    \item[(ii)] \textbf{Non-identifiability:} For $\theta_1, \theta_2$ on the same fiber, the distributions coincide: $p_{\theta_1} = p_{\theta_2}$. Equivalently, for any statistic measurable with respect to the $\sigma$-algebra generated by $\pi$, the induced distributions are identical. No estimator can distinguish parameters on the same fiber.
+
+    \item[(iii)] \textbf{Observed Fisher metric:} The pullback metric $g_{\text{obs}} := \pi^* \tilde{g}$ on $\M$ has rank $r$ with $\ker(g_{\text{obs}}) = \mathcal{V}$. In coordinates, $(g_{\text{obs}})_{ij} = \sum_{a,b} \frac{\partial \pi^a}{\partial \theta^i} \frac{\partial \pi^b}{\partial \theta^j} \tilde{g}_{ab}$.
+
+    \item[(iv)] \textbf{Singularity:} The observed model $\{\tilde{p}_y\}$ viewed in the original $\theta$-coordinates is \emph{singular} in the sense of Watanabe \citep{watanabe2009algebraic}: the effective Fisher information has rank $r < n$, and classical asymptotics (Cram\'er-Rao bounds, BIC) fail along vertical directions.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(i) By the constant rank theorem, $\ker(d\pi_\theta)$ has constant dimension $n - r$ on $U$. Integrability follows from Frobenius: $\mathcal{V} = \ker(d\pi)$ is the tangent bundle to the level sets of $\pi$, hence involutive.
+
+(ii) By Definition~\ref{def:collapse}, $\pi(\theta_1) = \pi(\theta_2)$ implies $p_{\theta_1} = \tilde{p}_{\pi(\theta_1)} = \tilde{p}_{\pi(\theta_2)} = p_{\theta_2}$.
+
+(iii) The pullback $\pi^* \tilde{g}$ has kernel equal to $\ker(d\pi) = \mathcal{V}$ by the chain rule. The coordinate formula follows from the definition of pullback.
+
+(iv) Vectors in $\mathcal{V}$ represent parameter changes that leave $\pi(\theta)$---and hence $p_\theta$---unchanged, so they contribute zero to the Fisher information of the observed model.
+\end{proof}
+
+\begin{remark}[Connection to Watanabe's Theory]
+Watanabe \citep{watanabe2009algebraic} characterizes singularities algebraically: the set where the Fisher matrix drops rank is an algebraic variety. His approach resolves singularities via blow-ups to compute the learning coefficient $\lambda$. Our framework is complementary: rather than resolving the singularity, we accept it as the feature that generates the quotient structure. The fiber structure provides the differential-geometric picture---singularity arises because the parameter-to-distribution map factors through a lower-dimensional space. The learning coefficient relates to the codimension of the singular set, which in our framework is $\dim(\mathcal{V}) = n - r$.
+\end{remark}
+
+%==============================================================================
+\section{Quotient Geometry}
+\label{sec:quotient}
+%==============================================================================
+
+\subsection{The Quotient Space}
+
+A collapse map $\pi: \M \to \R^k$ induces an equivalence relation:
+\begin{equation}
+    \theta_1 \sim_\pi \theta_2 \iff \pi(\theta_1) = \pi(\theta_2).
+\end{equation}
+The equivalence classes are exactly the fibers $\pi^{-1}(y)$.
+
+\begin{definition}[Quotient Statistical Manifold]
+The \emph{quotient} $\M/\sim_\pi$ is the set of equivalence classes, equipped with the quotient topology. When $\pi$ is a submersion (rank $k$ everywhere), the quotient inherits a smooth manifold structure of dimension $k$.
+\end{definition}
+
+\subsection{Descent of the Fisher Metric}
+
+For the Fisher metric to descend to a well-defined metric on $\M/\sim_\pi$, we need the metric to be constant along fibers in an appropriate sense.
+
+\begin{definition}[Bundle-Like Metric]
+A Riemannian metric $g$ on $\M$ is \emph{bundle-like} with respect to a foliation $\mathcal{F}$ if for any horizontal vector fields $X, Y$ (orthogonal to the leaves), the function $g(X, Y)$ is constant along leaves.
+\end{definition}
+
+\begin{theorem}[Quotient Metric]\label{thm:quotient-metric}
+Let $\pi: \M \to \R^k$ be a submersion (constant rank $k$). The Fisher metric $g$ descends to a Riemannian metric $\bar{g}$ on $\M/\sim_\pi$ if and only if the metric is bundle-like with respect to the fiber foliation. When this holds, the quotient metric is defined by $\bar{g}(d\pi(X), d\pi(Y)) = g(X, Y)$ for $X, Y \in \mathcal{H}$.
+\end{theorem}
+
+\begin{proof}
+The metric $\bar{g}$ is well-defined if and only if $g(X, Y)$ depends only on the equivalence classes, not on the choice of fiber representatives. For horizontal lifts $X, Y$ of vectors in the quotient, this requires $\mathcal{L}_V g(X, Y) = 0$ for all vertical vector fields $V$---i.e., $g(X, Y)$ is constant along fibers. This is precisely the bundle-like condition.
+\end{proof}
+
+\begin{proposition}[Totally Geodesic Implies Bundle-Like]\label{prop:geodesic-bundle}
+If the fibers are totally geodesic with respect to the Levi-Civita connection of $g$, then $g$ is bundle-like. The converse is false in general.
+\end{proposition}
+
+\begin{proof}
+Totally geodesic fibers imply that the second fundamental form vanishes. By O'Neill's formulas for Riemannian submersions, this forces $g(X, Y)$ to be constant along fibers for basic (projectable) horizontal vector fields. Thus totally geodesic is a sufficient but not necessary condition for metric descent.
+\end{proof}
+
+\begin{example}[Gaussian Families]
+Consider $\M = \{N(\mu, \sigma^2) : \mu \in \R, \sigma > 0\}$ with Fisher metric $g = \text{diag}(1/\sigma^2, 2/\sigma^2)$.
+
+The projection $\pi(\mu, \sigma) = \mu$ has fibers $\{\sigma > 0\}$ for each fixed $\mu$. The horizontal distribution is $\mathcal{H} = \text{span}(\partial_\mu)$. The quotient is $\R$ with metric $\bar{g} = 1/\sigma^2$---but this depends on $\sigma$, so the fibers are not totally geodesic and the quotient metric is not well-defined globally. However, on each fiber, we get a consistent 1D metric.
+
+The projection $\pi(\mu, \sigma) = \sigma$ has fibers $\{\mu \in \R\}$ for each fixed $\sigma$. The fibers \emph{are} totally geodesic (straight lines in the half-plane), and the quotient metric is $\bar{g} = 2/\sigma^2$ on $(0, \infty)$.
+\end{example}
+
+\subsection{Behavior of $\alpha$-Connections}
+
+\begin{proposition}[$\alpha$-Connection Under Collapse]\label{prop:alpha}
+Let $\pi: \M \to \R^k$ be a collapse map with totally geodesic fibers (for $\nabla^{(0)}$). Then:
+\begin{enumerate}
+    \item[(i)] The Levi-Civita connection $\nabla^{(0)}$ descends to the quotient.
+    \item[(ii)] The $\alpha$-connections $\nabla^{(\alpha)}$ descend if and only if the fibers are also totally geodesic with respect to $\nabla^{(\alpha)}$.
+    \item[(iii)] For exponential families, the e-connection ($\alpha = 1$) descends when projecting onto natural parameters; the m-connection ($\alpha = -1$) descends when projecting onto expectation parameters.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) follows from the Riemannian submersion theory. (ii) requires checking that parallel transport along fibers preserves horizontal vectors. (iii) follows from the dually flat structure: in natural coordinates, e-geodesics are straight lines, so any linear projection preserves them.
+\end{proof}
+
+\begin{corollary}[Preservation of Dual Flatness]
+If $\M$ is dually flat and $\pi$ is a linear projection in natural coordinates, then $\M/\sim_\pi$ inherits a dually flat structure.
+\end{corollary}
+
+This explains why projecting exponential families onto subsets of natural parameters yields well-behaved quotients: the dual flatness structure is preserved.
+
+%==============================================================================
+\section{Covering Numbers and Forced Discretization}
+\label{sec:covering}
+%==============================================================================
+
+\subsection{Finite Resolution}
+
+In practice, we distinguish points only up to finite resolution $\varepsilon > 0$. Rather than working with equivalence classes (which require an equivalence relation), we use covering numbers.
+
+\begin{definition}[Covering Number]
+The \emph{$\varepsilon$-covering number} of $\pi(K) \subset \R^k$ is:
+\begin{equation}
+    N(\varepsilon) = \min\{m : \exists y_1, \ldots, y_m \text{ such that } \pi(K) \subset \bigcup_{i=1}^m B_\varepsilon(y_i)\}.
+\end{equation}
+\end{definition}
+
+Each covering ball induces a cluster in $\M$: the preimage $\pi^{-1}(B_\varepsilon(y_i)) \cap K$. These clusters are the resolution-$\varepsilon$ equivalence classes.
+
+\subsection{Covering Number Bounds}
+
+\begin{theorem}[Covering Number Bound]\label{thm:covering}
+Let $\pi: \M \to \R^k$ have constant rank $r$ on a compact region $K \subset \M$. Suppose:
+\begin{itemize}
+    \item[(R1)] $\pi$ is $L$-Lipschitz: $\|\pi(x) - \pi(y)\| \leq L \cdot d_g(x, y)$.
+    \item[(R2)] The Jacobian restricted to $\mathcal{H}$ has singular values bounded below by $\sigma_{\min} > 0$.
+\end{itemize}
+Then:
+\begin{equation}
+    N(\varepsilon) \geq C_K \cdot \varepsilon^{-r},
+\end{equation}
+where the constant $C_K = \omega_r^{-1} \sigma_{\min}^r \cdot \text{Vol}_g(K) / \bar{V}_{\text{fiber}}$ absorbs the Fisher volume of $K$, the minimal singular value, and the mean fiber volume $\bar{V}_{\text{fiber}} = \text{Vol}_g(K) / \mathcal{H}^r(\pi(K))$. The bound is valid when fiber volumes are bounded away from zero and infinity on $K$.
+\end{theorem}
+
+\begin{proof}
+The image $\pi(K)$ has Hausdorff dimension $r$. By the area formula, $\mathcal{H}^r(\pi(K)) \geq \sigma_{\min}^r \cdot \text{Vol}_g(K) / \bar{V}_{\text{fiber}}$. Any $\varepsilon$-cover of $\pi(K)$ requires at least $\mathcal{H}^r(\pi(K)) / (\omega_r \varepsilon^r)$ balls, where $\omega_r$ is the volume of the unit $r$-ball.
+\end{proof}
+
+\begin{corollary}[Scaling Law]
+As resolution improves ($\varepsilon \to 0$), the number of distinguishable classes grows as $N(\varepsilon) \sim \varepsilon^{-r}$. Lower-rank projections (more severe collapse) yield fewer classes at any resolution.
+\end{corollary}
+
+\subsection{Connection to Minimal Embedding}
+
+The minimal embedding theorem of \citep{todd2025minimal} is a special case:
+
+\begin{corollary}[Minimal Embedding as Covering Collapse]\label{cor:embedding}
+Let $\gamma: S^1 \to \M$ be a cyclic process with monotone meta-time (a coordinate that increases strictly along the trajectory and resets at cycle completion). Consider the projection $\pi: \M \to \R^k$.
+\begin{enumerate}
+    \item[(i)] \textbf{$k = 2$:} Any such trajectory must self-intersect: the curve must return to its starting spatial position while meta-time has advanced. At each self-intersection, distinct temporal states (different meta-time values) map to the same projected point. This forces the \emph{effective} image rank to $r = 0$ at intersection loci. By Theorem~\ref{thm:covering}, the number of $\varepsilon$-distinguishable classes is bounded: $N(\varepsilon) = O(1)$ as $\varepsilon \to 0$.
+
+    \item[(ii)] \textbf{$k = 3$:} The Whitney embedding theorem guarantees that generic embeddings of $S^1$ into $\R^3$ are injective (no self-intersections). The projection has full rank $r = 1$ along the curve, and Theorem~\ref{thm:covering} yields $N(\varepsilon) \sim \varepsilon^{-1} \to \infty$.
+\end{enumerate}
+\end{corollary}
+
+The $k = 3$ threshold marks the transition from ``too few classes'' (forced discretization) to ``enough classes'' (preserved continuity). In the language of the present framework: the meta-time coordinate becomes part of the vertical distribution $\mathcal{V}$ when $k = 2$, because self-intersections collapse temporally distinct states to the same fiber. At $k = 3$, meta-time remains in the horizontal distribution $\mathcal{H}$ and contributes to distinguishability.
+
+%==============================================================================
+\section{Examples}
+\label{sec:examples}
+%==============================================================================
+
+\subsection{Exponential Families}
+
+Let $\M$ be an exponential family:
+\begin{equation}
+    p_\theta(x) = \exp(\theta \cdot T(x) - A(\theta))h(x),
+\end{equation}
+with natural parameters $\theta \in \R^n$ and sufficient statistics $T: \mathcal{X} \to \R^n$. The Fisher metric is $g_{ij} = \partial^2 A / \partial \theta^i \partial \theta^j$.
+
+\textbf{Projection to subset of parameters.} Let $\pi(\theta) = (\theta_1, \ldots, \theta_k)$. The fibers are affine subspaces $\{(\theta_1, \ldots, \theta_k, \theta_{k+1}, \ldots, \theta_n) : \theta_{k+1}, \ldots, \theta_n \text{ vary}\}$.
+
+Since $A$ is convex, the Hessian restricted to fibers is positive definite, so fibers have positive volume. The quotient is the marginal exponential family on $(T_1, \ldots, T_k)$.
+
+\begin{example}[Multinomial]
+For a $K$-category multinomial, $\M$ has dimension $K-1$. Projecting to the first $k$ category probabilities yields a quotient where distributions agreeing on $p_1, \ldots, p_k$ are equivalent. The fiber over $(p_1, \ldots, p_k)$ consists of all ways to distribute the remaining probability $1 - \sum_{i=1}^k p_i$ among categories $k+1, \ldots, K$.
+\end{example}
+
+\subsection{Location-Scale Families}
+
+Consider the location-scale family $p_{\mu,\sigma}(x) = \sigma^{-1} f((x-\mu)/\sigma)$ for a fixed density $f$. The Fisher metric depends on $f$ but has the general form:
+\begin{equation}
+    g = \begin{pmatrix} a/\sigma^2 & b/\sigma^2 \\ b/\sigma^2 & c/\sigma^2 \end{pmatrix}
+\end{equation}
+for constants $a, b, c$ determined by $f$.
+
+\textbf{Projection to location.} $\pi(\mu, \sigma) = \mu$. The fibers $\{\sigma > 0\}$ are not totally geodesic in general. The quotient metric would be $\bar{g} = (a - b^2/c)/\sigma^2$, which depends on the fiber coordinate $\sigma$---so no well-defined global quotient metric exists.
+
+\textbf{Projection to scale.} $\pi(\mu, \sigma) = \sigma$. The fibers $\{\mu \in \R\}$ are geodesics when $b = 0$ (e.g., for symmetric $f$). In this case, the quotient metric $\bar{g} = c/\sigma^2$ is well-defined.
+
+\subsection{Gaussian Mixtures}
+
+Consider 2-component Gaussian mixtures $p_\theta = w N(\mu_1, \sigma_1^2) + (1-w) N(\mu_2, \sigma_2^2)$ with $\theta = (w, \mu_1, \sigma_1, \mu_2, \sigma_2) \in (0,1) \times \R \times \R_+ \times \R \times \R_+$.
+
+This is a singular model: when $\mu_1 = \mu_2$ and $\sigma_1 = \sigma_2$, the weight $w$ is non-identifiable. The singular set is a 3-dimensional submanifold.
+
+In our framework: the ``identity'' map (no explicit projection) has fibers along the non-identifiable locus. The effective Fisher information has rank 3 (not 5) on this locus, consistent with Theorem~\ref{thm:fiber}(iii).
+
+%==============================================================================
+\section{Discussion}
+\label{sec:discussion}
+%==============================================================================
+
+\subsection{Geometric Interpretation of Singularity}
+
+The fiber structure theorem provides a geometric interpretation of singular statistical models: singularity arises when the parameter-to-distribution map factors through a lower-dimensional space. The ``redundant'' parameters span the fibers, and the effective model lives on the quotient.
+
+This complements Watanabe's algebraic approach. Where he characterizes singularities via resolution of singularities and learning coefficients, we characterize them via fiber dimension and quotient geometry. The two perspectives are related: Watanabe's learning coefficient $\lambda$ measures how the log-likelihood degenerates near singularities, while our fiber dimension measures the local rank drop.
+
+\subsection{Sufficient Statistics and Chentsov's Theorem}
+
+Chentsov's theorem states that the Fisher metric is invariant under sufficient statistics. Our framework explains this geometrically: a sufficient statistic defines a collapse map whose fibers are exactly the parameter sets with identical sufficient statistic distributions. The quotient inherits the Fisher metric precisely because the original metric is constant along these fibers.
+
+Conversely, collapse maps that do \emph{not} correspond to sufficient statistics have fibers that are not metrically homogeneous, obstructing metric descent.
+
+\subsection{Implications for Dimensional Reduction}
+
+The covering number bounds quantify what is lost under dimensional reduction. The key parameter is the \emph{rank} of the collapse map:
+\begin{itemize}
+    \item Rank $r$ projections yield $O(\varepsilon^{-r})$ distinguishable classes.
+    \item Lower rank means coarser quotient: fewer classes at any resolution.
+    \item The minimal embedding dimension is the smallest $k$ such that the projection has full rank generically.
+\end{itemize}
+
+This provides a geometric foundation for understanding when low-dimensional representations preserve essential structure. These resolution-dependent equivalence classes provide a natural substrate on which discrete structures may be defined, without invoking any additional assumptions beyond the geometry of the collapse map.
+
+\subsection{Open Problems}
+
+\begin{enumerate}
+    \item \textbf{Optimal quotients:} Given a target dimension $k$, which collapse maps minimize information loss (in a rate-distortion sense) while respecting the Fisher geometry?
+
+    \item \textbf{Curvature under collapse:} How do sectional curvatures transform under quotient maps? Are there obstructions to negative curvature in low-dimensional quotients?
+
+    \item \textbf{Holonomy:} When the horizontal distribution $\mathcal{H}$ is not integrable, parallel transport around loops in the quotient may not close. This is analogous to Berry phase in quantum mechanics. The statistical interpretation: the inferred state after a cycle in the projected space may depend on the unobserved trajectory through the fibers---a form of path-dependent inference.
+
+    \item \textbf{Higher-order geometry:} How do higher-order tensors (cubic forms, etc.) in information geometry behave under collapse?
+\end{enumerate}
+
+%==============================================================================
+\section{Conclusion}
+%==============================================================================
+
+We have developed the quotient geometry of statistical manifolds under collapse maps. The main results are:
+
+\begin{enumerate}
+    \item \textbf{Fiber Structure Theorem:} Collapse maps foliate the manifold into fibers along which the Fisher metric degenerates, with points on the same fiber being statistically non-identifiable.
+
+    \item \textbf{Quotient Metric Theorem:} The Fisher metric descends to a quotient metric if and only if it is bundle-like (constant along fibers on horizontal vectors); totally geodesic fibers provide a sufficient condition. The $\alpha$-connection structure descends under additional conditions.
+
+    \item \textbf{Covering Number Bounds:} The number of distinguishable classes at resolution $\varepsilon$ scales as $\varepsilon^{-r}$ where $r$ is the projection rank.
+\end{enumerate}
+
+The framework unifies dimensional reduction, sufficient statistics, and singular models under a common geometric structure. The minimal embedding theorem for recurrent processes emerges as a special case: the $k = 3$ threshold marks where covering numbers transition from bounded to unbounded.
+
+\section*{Acknowledgments}
+
+The author thanks the editors of Information Geometry for the opportunity to contribute to this special topic.
+
+\section*{Statements and Declarations}
+
+\textbf{Funding:} No external funding was received for this research.
+
+\textbf{Competing Interests:} The author has no competing interests to declare.
+
+\textbf{Data Availability:} This is a theoretical paper; no datasets were generated or analyzed.
+
+\bibliographystyle{unsrt}
+\bibliography{references}
+
+\end{document}

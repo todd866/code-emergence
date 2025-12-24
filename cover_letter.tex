@@ -3,33 +3,35 @@
 \usepackage{hyperref}
 
 \signature{Ian Todd\\Sydney Medical School\\University of Sydney}
-\address{Sydney Medical School\\University of Sydney\\Sydney, NSW, Australia\\itod2305@uni.sydney.edu.au}
+\address{Sydney Medical School\\University of Sydney\\Sydney, NSW 2006\\Australia\\itod2305@uni.sydney.edu.au}
 
 \begin{document}
 
-\begin{letter}{Editorial Office\\Progress in Biophysics \& Molecular Biology}
+\begin{letter}{Editorial Office\\Information Geometry\\Springer}
 
 \opening{Dear Editors,}
 
-I am pleased to submit the manuscript ``The Code-Constraint Problem in Biological Systems: How Low-Dimensional Interfaces Shape High-Dimensional Dynamics'' for consideration as a Perspective article in \textit{Progress in Biophysics \& Molecular Biology}.
+I am pleased to submit the manuscript entitled ``Quotient Geometry of Statistical Manifolds Under Dimensional Collapse'' for consideration in \textit{Information Geometry}.
 
-\textbf{Summary.} Biological systems operate in high-dimensional state spaces, yet experimental readouts---order parameters, expression markers, population codes---are inevitably low-dimensional. This dimensional mismatch creates systematic interpretive challenges across molecular, cellular, and systems biology. The manuscript proposes a unifying framework: low-dimensional interfaces function as \textit{stabilizing constraints} rather than information channels. Using coupled oscillator simulations, we demonstrate a distinctive signature---complexity collapse in responding systems with bounded tracking---that appears only for structured projections capturing coherent collective variables.
+This paper develops the differential geometry of statistical manifolds under collapse maps---smooth maps $\pi: \mathcal{M} \to \mathbb{R}^k$ with $k < \dim(\mathcal{M})$. The work generalizes the minimal embedding theorem for recurrent processes (manuscript INGE-D-25-00099, currently under review at this journal) to arbitrary dimensional reduction on statistical manifolds.
 
-\textbf{Why PBMB?} This work bridges multiple domains that your journal integrates:
-\begin{itemize}
-\item \textit{Molecular biophysics}: We connect to protein conformational dynamics and the reliability of order-parameter descriptions (folding funnels, reaction coordinates).
-\item \textit{Systems biology}: The framework addresses when coarse-grained models are reliable versus when they become ``shadows'' of latent dynamics---a question central to gene regulatory network modeling.
-\item \textit{Bioelectricity and morphogenesis}: We explicitly connect to Michael Levin's work on bioelectric control of pattern formation, where low-dimensional voltage gradients constrain high-dimensional cellular dynamics.
-\item \textit{Theoretical synthesis}: The paper positions the constraint framework relative to synergetics, information bottleneck theory, and Markov blanket formalism, offering a new quantitative dimension (bandwidth) to these established approaches.
-\end{itemize}
+The main contributions are:
 
-\textbf{Novel contribution.} The central claim is testable and distinct from existing frameworks: we propose a \textit{dynamical regime diagnostic}---complexity collapse in responding systems while tracking error remains bounded with respect to coarse-grained reconstruction. This signature discriminates effective biological codes (structured collective variables) from arbitrary dimensional reductions (which fail to induce constraint). The minimal model is intentionally abstract to emphasize generality; we include a concrete translation to protein-ligand binding with experimentally testable predictions.
+\begin{enumerate}
+    \item \textbf{Fiber Structure Theorem:} We show that collapse maps foliate $\mathcal{M}$ into fibers along which the Fisher metric degenerates. Points on the same fiber are statistically non-identifiable, providing a differential-geometric interpretation of Watanabe's singular learning theory.
 
-\textbf{Broader significance.} The framework offers practical criteria for evaluating when low-dimensional models are reliable, with implications for experimental design across scales---from choosing reaction coordinates in molecular dynamics to interpreting single-cell manifolds to understanding neural population constraints.
+    \item \textbf{Quotient Metric Theorem:} We characterize when the Fisher metric descends to a well-defined Riemannian metric on the quotient $\mathcal{M}/\sim_\pi$, establishing that fibers must be totally geodesic. We show how $\alpha$-connections transform under collapse and identify conditions for dual flatness to survive.
 
-I confirm that this work is original, has not been published elsewhere, and is not under consideration at another journal. All simulation code and data are publicly available at \url{https://github.com/todd866/code-formation-jtb}.
+    \item \textbf{Covering Number Bounds:} We prove that the number of $\varepsilon$-distinguishable equivalence classes scales as $N(\varepsilon) \sim \varepsilon^{-r}$ where $r$ is the projection rank, quantifying the ``discretization'' induced by dimensional collapse.
+\end{enumerate}
 
-Thank you for considering this submission. I look forward to your response.
+The paper connects to core themes of information geometry: Chentsov's uniqueness theorem (the Fisher metric is invariant under sufficient statistics; our quotient construction respects this), Amari's $\alpha$-geometry (we characterize when dual connections descend), and Watanabe's singular learning theory (our fiber structure provides the differential-geometric setting for his algebraic singularities).
+
+This work is appropriate for \textit{Information Geometry} because it develops fundamental Riemannian and affine geometry on statistical manifolds, extending classical results on submersions and quotients to the information-geometric setting.
+
+The manuscript has not been submitted elsewhere. There are no conflicts of interest to declare.
+
+Thank you for considering this submission.
 
 \closing{Sincerely,}
 
